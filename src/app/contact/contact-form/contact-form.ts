@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Contact } from '../../core/interfaces/paginated.interface';
@@ -6,6 +6,7 @@ import { ContactService } from '../../core/services/contact.service';
 import { CommonModule } from '@angular/common';
 import { NgxMaskDirective } from 'ngx-mask';
 import { ContactStore } from '../../core/state/contact.store';
+import { CanComponentDeactivate } from '../unsaved-changes-guard';
 
 @Component({
   selector: 'app-contact-form',
@@ -13,17 +14,24 @@ import { ContactStore } from '../../core/state/contact.store';
   templateUrl: './contact-form.html',
   styleUrl: './contact-form.scss',
 })
-export class ContactForm {
+export class ContactForm implements CanComponentDeactivate {
   private fb = inject(FormBuilder);
   private service = inject(ContactService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private store = inject(ContactStore);
-  private cdr = inject(ChangeDetectorRef);
   isEditMode = false;
   contactId?: number;
   errorMessage = signal<string | null>(null);
-
+  formTouched = false;
+  canDeactivate(): boolean {
+    if (this.formTouched && this.form.dirty) {
+      return confirm(
+        'Você tem alterações não salvas. Deseja sair mesmo assim?'
+      );
+    }
+    return true;
+  }
   form = this.fb.group({
     name: ['', [Validators.required]],
     email: ['', []],
@@ -34,21 +42,30 @@ export class ContactForm {
   });
 
   ngOnInit() {
+    console.log(this.formTouched, this.form.dirty);
+    this.form.valueChanges.subscribe(() => {
+      this.formTouched = this.form.dirty;
+    });
     const idParam = this.route.snapshot.paramMap.get('id');
     if (idParam) {
       this.isEditMode = true;
       this.contactId = +idParam;
       this.service.findById(this.contactId).subscribe((contact) => {
         this.form.patchValue(contact);
+        this.form.markAsPristine();
+        this.form.markAsUntouched();
       });
     }
+  }
+  onCancel() {
+    this.router.navigate(['/']);
   }
 
   onSubmit() {
     if (this.form.invalid) return;
 
     const data = this.form.value as Contact;
-
+    this.form.markAsPristine();
     if (this.isEditMode && this.contactId) {
       this.service.updateContact(this.contactId, data).subscribe((contact) => {
         this.store.updateContact(contact);
@@ -63,10 +80,7 @@ export class ContactForm {
           this.router.navigate(['/']);
         },
         error: (error) => {
-          if (
-            error.status === 409 &&
-            error.error?.message?.toLowerCase().includes('mobile')
-          ) {
+          if (error.error?.message?.toLowerCase().includes('mobile')) {
             this.form.get('mobile')?.setErrors({ duplicate: true });
             this.form.get('mobile')?.markAsTouched();
             this.errorMessage.set('Número de celular já cadastrado.');

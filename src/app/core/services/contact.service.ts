@@ -2,12 +2,13 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Contact, PaginatedContact } from '../interfaces/paginated.interface';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ContactService {
-  private readonly apiUrl = 'http://localhost:8080/api/contacts';
+  private readonly apiUrl = environment.apiUrl + '/contacts';
 
   constructor(private http: HttpClient) {}
 

@@ -3,6 +3,7 @@ import { Home } from './home/home';
 import { ContactForm } from './contact/contact-form/contact-form';
 import { contactFormGuard } from './contact/contact-form-guard';
 import { UnauthorizedPag } from './unauthorized-pag/unauthorized-pag';
+import { UnsavedChangesGuard } from './contact/unsaved-changes-guard';
 
 export const routes: Routes = [
   {
@@ -16,12 +17,14 @@ export const routes: Routes = [
     component: ContactForm,
     canActivate: [contactFormGuard],
     data: { permission: 'create' },
+    canDeactivate: [UnsavedChangesGuard],
   },
   {
     path: 'contacts/:id/edit',
     component: ContactForm,
     canActivate: [contactFormGuard],
     data: { permission: 'update' },
+    canDeactivate: [UnsavedChangesGuard],
   },
   {
     path: 'unauthorized',

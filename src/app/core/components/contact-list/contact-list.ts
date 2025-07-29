@@ -57,19 +57,4 @@ export class ContactList {
       );
     });
   }
-
-  onImageUploaded(payload: { contact: Contact; file: File }) {
-    /* const formData = new FormData();
-    formData.append('file', payload.file);
-
-    this.contactService
-      .uploadImage(payload.contact.id, formData)
-      .subscribe((imageUrl) => {
-        const updated = { ...payload.contact, imageUrl };
-        const updatedList = this.contacts().map((c) =>
-          c.id === payload.contact.id ? updated : c
-        );
-        this.store.contacts.set(updatedList);
-      }); */
-  }
 }

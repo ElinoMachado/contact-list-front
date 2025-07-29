@@ -41,8 +41,12 @@
     <input type="checkbox" formControlName="isActive" />
     Ativo
   </label>
-
-  <button type="submit" [disabled]="form.invalid">
-    {{ isEditMode ? "Salvar Alterações" : "Criar Contato" }}
-  </button>
+  <div class="buttons">
+    <button type="button" class="btn-cancel" (click)="onCancel()">
+      {{ "Voltar" }}
+    </button>
+    <button type="submit" [disabled]="form.invalid">
+      {{ isEditMode ? "Salvar Alterações" : "Criar Contato" }}
+    </button>
+  </div>
 </form>

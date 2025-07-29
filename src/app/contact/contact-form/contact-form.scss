@@ -65,8 +65,30 @@ form {
     margin-top: -0.75rem;
     margin-bottom: -0.25rem;
   }
+  .buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1.5rem;
+  }
+  button {
+    &.btn-cancel {
+      align-self: flex-start;
+      background-color: transparent;
+      color: #4a90e2;
+      border: 1px solid #4a90e2;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background-color 0.25s ease;
 
-  button[type="submit"] {
+      &:hover {
+        background-color: #4a90e2;
+        color: #fff;
+      }
+    }
+
     align-self: flex-end;
     background-color: #4a90e2;
     color: #fff;

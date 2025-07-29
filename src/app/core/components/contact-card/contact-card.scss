@@ -1,12 +1,34 @@
+.card:hover {
+  background-color: #e0e1e5;
+  transition: all 0.7s ease;
+  transform: scale(1.05);
+}
 .card {
+  cursor: pointer;
   display: flex;
   align-items: flex-start;
   padding: 1rem;
   background-color: #f5f6f8;
   border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  box-shadow: -4px 7px 6px rgba(0, 0, 0, 0.08);
   margin-bottom: 1rem;
   transition: background-color 0.2s ease;
+  &.inactive {
+    opacity: 0.5;
+    filter: grayscale(0.4);
+  }
+  .text-truncate {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+    line-height: 1.4;
+
+    // opcional: estilização leve
+    color: #333;
+    font-size: 0.95rem;
+  }
 
   .avatar {
     position: relative;
@@ -35,11 +57,19 @@
   }
 
   .info {
-    flex: 1;
+    //flex: 1;
+    width: 90%;
     margin-left: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    p,
+    small {
+      width: 230px;
+    }
 
     h3 {
-      margin: 0 0 0.5rem;
+      width: 260px;
     }
 
     p {
@@ -58,6 +88,7 @@
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    width: 10%;
 
     button {
       background: none;

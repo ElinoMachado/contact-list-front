@@ -17,6 +17,6 @@ export interface Contact {
   isFavorite: boolean;
   isActive: boolean;
   imageUrl?: string;
-  updatedAt: string;
+  createdAt: string;
 }
 export interface PaginatedContact extends Paginated<Contact> {}

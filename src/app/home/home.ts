@@ -24,17 +24,6 @@ export class Home {
     const value = (event.target as HTMLInputElement).value;
     this.store.search(value);
   }
-
-  onActiveToggle(event: Event) {
-    const checked = (event.target as HTMLInputElement).checked;
-    this.store.toggleActiveFilter(checked);
-  }
-
-  onFavoriteToggle(event: Event) {
-    const checked = (event.target as HTMLInputElement).checked;
-    this.store.toggleFavoriteFilter(checked);
-  }
-
   onSizeChange(event: Event) {
     const size = parseInt((event.target as HTMLSelectElement).value, 10);
     this.store.changePageSize(size);

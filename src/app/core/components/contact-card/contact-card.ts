@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { Contact } from '../../interfaces/paginated.interface';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-contact-card',
@@ -9,6 +10,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './contact-card.scss',
 })
 export class ContactCard {
+  router = inject(Router);
   @Input() contact!: Contact;
   @Output() favoriteToggled = new EventEmitter<Contact>();
   @Output() deactivated = new EventEmitter<Contact>();
@@ -18,7 +20,17 @@ export class ContactCard {
   }>();
 
   showUpload = false;
-
+  onCardClick(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    if (
+      target.closest('button') ||
+      target.closest('input[type="file"]') ||
+      target.tagName === 'BUTTON'
+    ) {
+      return;
+    }
+    this.router.navigate(['/contacts', this.contact.id, 'edit']);
+  }
   onToggleFavorite() {
     this.favoriteToggled.emit(this.contact);
   }

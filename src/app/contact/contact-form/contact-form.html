@@ -1,0 +1,48 @@
+<h2>{{ isEditMode ? "Editar Contato" : "Criar Novo Contato" }}</h2>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <label>Nome</label>
+  <input type="text" formControlName="name" />
+  <div
+    class="warning"
+    *ngIf="form.get('name')?.invalid && form.get('name')?.touched"
+  >
+    Nome é obrigatório.
+  </div>
+
+  <label>Email</label>
+  <input type="email" formControlName="email" />
+
+  <label>Telefone fixo</label>
+  <input type="text" formControlName="phone" mask="(00) 0000 - 0000" />
+
+  <label>Celular</label>
+  <input type="text" formControlName="mobile" mask="(00) 00000 - 0000" />
+  <div class="warning" *ngIf="errorMessage()">
+    {{ errorMessage() }}
+  </div>
+  <div
+    class="warning"
+    *ngIf="
+      form.get('mobile')?.invalid &&
+      form.get('mobile')?.touched &&
+      !form.get('mobile')?.hasError('duplicate')
+    "
+  >
+    Celular é obrigatório.
+  </div>
+
+  <label>
+    <input type="checkbox" formControlName="isFavorite" />
+    Favorito
+  </label>
+
+  <label>
+    <input type="checkbox" formControlName="isActive" />
+    Ativo
+  </label>
+
+  <button type="submit" [disabled]="form.invalid">
+    {{ isEditMode ? "Salvar Alterações" : "Criar Contato" }}
+  </button>
+</form>

@@ -1,4 +1,9 @@
-<div class="card" cdkDrag>
+<div
+  class="card"
+  cdkDrag
+  (click)="onCardClick($event)"
+  [ngClass]="{ inactive: !contact.isActive }"
+>
   <div
     class="avatar"
     (mouseenter)="showUpload = true"
@@ -20,11 +25,13 @@
   </div>
 
   <div class="info">
-    <h3>{{ contact.name }}</h3>
-    <p>Email: {{ contact.email }}</p>
+    <h3 class="text-truncate">{{ contact.name }}</h3>
+    <p class="text-truncate">Email: {{ contact.email }}</p>
     <p>Celular: {{ contact.mobile }}</p>
     <p>Fixo: {{ contact.phone }}</p>
-    <small>Atualizado em: {{ contact.updatedAt | date : "shortDate" }}</small>
+    <small
+      >Criado em: {{ contact.createdAt | date : "dd/MM/yyyy HH:mm" }}</small
+    >
   </div>
 
   <div class="actions">

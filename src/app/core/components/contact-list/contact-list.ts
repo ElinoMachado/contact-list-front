@@ -44,10 +44,17 @@ export class ContactList {
   }
 
   onDeactivate(contact: Contact) {
-    const updated = { ...contact, isActive: false };
+    const updated = { ...contact, isActive: !contact.isActive };
     this.contactService.updateContact(contact.id, updated).subscribe(() => {
-      const updatedList = this.contacts().filter((c) => c.id !== contact.id);
-      this.store.contacts.set(updatedList);
+      const updatedList = this.contacts().map((c) =>
+        c.id === contact.id ? updated : c
+      );
+      this.store.contacts.set(
+        updatedList.sort((a, b) => {
+          if (a.isActive !== b.isActive) return a.isActive ? -1 : 1;
+          return a.name.localeCompare(b.name);
+        })
+      );
     });
   }
 

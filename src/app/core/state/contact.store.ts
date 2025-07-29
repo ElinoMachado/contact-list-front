@@ -4,8 +4,6 @@ import { Contact } from '../interfaces/paginated.interface';
 
 type ContactFilters = {
   search: string;
-  isActive?: boolean;
-  isFavorite?: boolean;
   page: number;
   size: number;
 };
@@ -16,8 +14,6 @@ export class ContactStore {
 
   private filters = signal<ContactFilters>({
     search: '',
-    isActive: undefined,
-    isFavorite: undefined,
     page: 0,
     size: 20,
   });
@@ -40,8 +36,6 @@ export class ContactStore {
     const params = this.filters();
     this.contactService.findAll(params).subscribe((res) => {
       let contacts = res.content;
-
-      // Favoritos no topo e ordem alfabética
       contacts = contacts.sort((a, b) => {
         if (a.isFavorite !== b.isFavorite) {
           return a.isFavorite ? -1 : 1;
@@ -75,11 +69,32 @@ export class ContactStore {
     this.setFilter({ search: text, page: 0 });
   }
 
-  toggleActiveFilter(value: boolean) {
-    this.setFilter({ isActive: value ? true : undefined, page: 0 });
+  addContacts(newContacts: Contact[]) {
+    const updated = [...this.contacts(), ...newContacts];
+
+    const sorted = updated.sort((a, b) => {
+      if (a.isFavorite !== b.isFavorite) {
+        return a.isFavorite ? -1 : 1;
+      }
+      return a.name.localeCompare(b.name);
+    });
+
+    this.contacts.set(sorted);
+    this.totalElements.set(this.totalElements() + newContacts.length);
   }
 
-  toggleFavoriteFilter(value: boolean) {
-    this.setFilter({ isFavorite: value ? true : undefined, page: 0 });
+  updateContact(updated: Contact) {
+    const updatedList = this.contacts().map((c) =>
+      c.id === updated.id ? updated : c
+    );
+
+    const sorted = updatedList.sort((a, b) => {
+      if (a.isFavorite !== b.isFavorite) {
+        return a.isFavorite ? -1 : 1;
+      }
+      return a.name.localeCompare(b.name);
+    });
+
+    this.contacts.set(sorted);
   }
 }

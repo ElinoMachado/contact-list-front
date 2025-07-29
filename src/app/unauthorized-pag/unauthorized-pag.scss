@@ -1,0 +1,19 @@
+.unauthorized-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #fafafa;
+  color: #b00020;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+
+  h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    font-size: 1.2rem;
+  }
+}

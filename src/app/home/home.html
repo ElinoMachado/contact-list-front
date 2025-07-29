@@ -4,20 +4,12 @@
 
     <input
       type="text"
+      ng
+      serve
       class="search-input"
       placeholder="Buscar por nome, telefone ou e-mail..."
       (input)="onSearch($event)"
     />
-
-    <label>
-      <input type="checkbox" (change)="onActiveToggle($event)" />
-      Somente ativos
-    </label>
-
-    <label>
-      <input type="checkbox" (change)="onFavoriteToggle($event)" />
-      Somente favoritos
-    </label>
   </div>
 
   <app-contact-list></app-contact-list>

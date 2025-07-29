@@ -37,4 +37,11 @@ export class ContactService {
   updateContact(id: number, data: Partial<Contact>): Observable<Contact> {
     return this.http.put<Contact>(`${this.apiUrl}/${id}`, data);
   }
+
+  findById(id: number): Observable<Contact> {
+    return this.http.get<Contact>(`${this.apiUrl}/${id}`);
+  }
+  createContact(data: Contact): Observable<Contact> {
+    return this.http.post<Contact>(this.apiUrl, data);
+  }
 }

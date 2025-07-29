@@ -1,0 +1,41 @@
+<div class="card" cdkDrag>
+  <div
+    class="avatar"
+    (mouseenter)="showUpload = true"
+    (mouseleave)="showUpload = false"
+  >
+    <ng-container *ngIf="contact.imageUrl; else defaultIcon">
+      <img [src]="contact.imageUrl" alt="Imagem do contato" />
+    </ng-container>
+    <ng-template #defaultIcon>
+      <i class="fa fa-user-circle"></i>
+    </ng-template>
+
+    <input
+      *ngIf="showUpload"
+      type="file"
+      class="upload"
+      (change)="onUploadImage($event)"
+    />
+  </div>
+
+  <div class="info">
+    <h3>{{ contact.name }}</h3>
+    <p>Email: {{ contact.email }}</p>
+    <p>Celular: {{ contact.mobile }}</p>
+    <p>Fixo: {{ contact.phone }}</p>
+    <small>Atualizado em: {{ contact.updatedAt | date : "shortDate" }}</small>
+  </div>
+
+  <div class="actions">
+    <button
+      (click)="onToggleFavorite()"
+      [title]="contact.isFavorite ? 'Remover dos favoritos' : 'Favoritar'"
+    >
+      <i class="fa fa-star" [ngClass]="{ favorite: contact.isFavorite }"></i>
+    </button>
+    <button (click)="onDeactivate()" title="Desativar contato">
+      <i class="fa fa-trash"></i>
+    </button>
+  </div>
+</div>

@@ -1,0 +1,39 @@
+<section class="home-container">
+  <div class="toolbar">
+    <button (click)="goToCreate()" class="add-btn">+ Novo Contato</button>
+
+    <input
+      type="text"
+      class="search-input"
+      placeholder="Buscar por nome, telefone ou e-mail..."
+      (input)="onSearch($event)"
+    />
+
+    <label>
+      <input type="checkbox" (change)="onActiveToggle($event)" />
+      Somente ativos
+    </label>
+
+    <label>
+      <input type="checkbox" (change)="onFavoriteToggle($event)" />
+      Somente favoritos
+    </label>
+  </div>
+
+  <app-contact-list></app-contact-list>
+
+  <div class="pagination">
+    <button (click)="prevPage()">← Anterior</button>
+    <span
+      >Página {{ filters.currentPage() + 1 }} de
+      {{ filters.totalPages() }}</span
+    >
+    <button (click)="nextPage()">Próxima →</button>
+
+    <select (change)="onSizeChange($event)">
+      <option [value]="10">10</option>
+      <option [value]="20" selected>20</option>
+      <option [value]="50">50</option>
+    </select>
+  </div>
+</section>

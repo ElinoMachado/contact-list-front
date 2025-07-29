@@ -1,0 +1,18 @@
+<div cdkDropList (cdkDropListDropped)="drop($event)">
+  <ng-container *ngIf="contacts().length; else emptyState">
+    <app-contact-card
+      *ngFor="let contact of contacts()"
+      [contact]="contact"
+      (favoriteToggled)="onFavoriteToggled($event)"
+      (deactivated)="onDeactivate($event)"
+      (imageUploaded)="onImageUploaded($event)"
+    ></app-contact-card>
+  </ng-container>
+
+  <ng-template #emptyState>
+    <div class="empty">
+      <p>Nenhum contato encontrado.</p>
+      <button routerLink="/contacts/create">Criar contato</button>
+    </div>
+  </ng-template>
+</div>

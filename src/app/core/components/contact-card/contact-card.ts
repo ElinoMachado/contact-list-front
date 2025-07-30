@@ -2,10 +2,11 @@ import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { Contact } from '../../interfaces/paginated.interface';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 
 @Component({
   selector: 'app-contact-card',
-  imports: [CommonModule],
+  imports: [CommonModule, NgxMaskPipe],
   templateUrl: './contact-card.html',
   styleUrl: './contact-card.scss',
 })

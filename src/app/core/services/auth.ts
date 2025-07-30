@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class AuthService {
-  private permissions: string[] = ['create', 'read', 'update', 'delete'];
+  private permissions: string[] = [/* 'create' */ 'read', 'update', 'delete'];
 
   hasPermission(permission: string): boolean {
     return this.permissions.includes(permission);

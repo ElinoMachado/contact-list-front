@@ -15,7 +15,7 @@ export class ContactStore {
   private filters = signal<ContactFilters>({
     search: '',
     page: 0,
-    size: 20,
+    size: 5,
   });
 
   readonly contacts = signal<Contact[]>([]);

@@ -35,11 +35,9 @@ export class ContactList {
         c.id === contact.id ? updated : c
       );
       this.store.contacts.set(
-        updatedList.sort((a, b) => {
-          if (a.isFavorite !== b.isFavorite) return a.isFavorite ? -1 : 1;
-          return a.name.localeCompare(b.name);
-        })
+        updatedList
       );
+      this.store.loadContacts()
     });
   }
 
@@ -50,11 +48,9 @@ export class ContactList {
         c.id === contact.id ? updated : c
       );
       this.store.contacts.set(
-        updatedList.sort((a, b) => {
-          if (a.isActive !== b.isActive) return a.isActive ? -1 : 1;
-          return a.name.localeCompare(b.name);
-        })
+        updatedList
       );
+      this.store.loadContacts()
     });
   }
 }

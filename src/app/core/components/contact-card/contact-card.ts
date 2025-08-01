@@ -39,11 +39,4 @@ export class ContactCard {
   onDeactivate() {
     this.deactivated.emit(this.contact);
   }
-
-  onUploadImage(event: Event) {
-    const file = (event.target as HTMLInputElement).files?.[0];
-    if (file) {
-      this.imageUploaded.emit({ contact: this.contact, file });
-    }
-  }
 }

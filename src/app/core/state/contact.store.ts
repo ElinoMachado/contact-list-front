@@ -32,17 +32,10 @@ export class ContactStore {
     this.filters.update((f) => ({ ...f, ...update }));
   }
 
-  private loadContacts() {
+  public loadContacts() {
     const params = this.filters();
     this.contactService.findAll(params).subscribe((res) => {
       let contacts = res.content;
-      contacts = contacts.sort((a, b) => {
-        if (a.isFavorite !== b.isFavorite) {
-          return a.isFavorite ? -1 : 1;
-        }
-        return a.name.localeCompare(b.name);
-      });
-
       this.contacts.set(contacts);
       this.totalElements.set(res.totalElements);
       this.totalPages.set(res.totalPages);
@@ -71,15 +64,7 @@ export class ContactStore {
 
   addContacts(newContacts: Contact[]) {
     const updated = [...this.contacts(), ...newContacts];
-
-    const sorted = updated.sort((a, b) => {
-      if (a.isFavorite !== b.isFavorite) {
-        return a.isFavorite ? -1 : 1;
-      }
-      return a.name.localeCompare(b.name);
-    });
-
-    this.contacts.set(sorted);
+    this.contacts.set(updated);
     this.totalElements.set(this.totalElements() + newContacts.length);
   }
 
@@ -87,14 +72,6 @@ export class ContactStore {
     const updatedList = this.contacts().map((c) =>
       c.id === updated.id ? updated : c
     );
-
-    const sorted = updatedList.sort((a, b) => {
-      if (a.isFavorite !== b.isFavorite) {
-        return a.isFavorite ? -1 : 1;
-      }
-      return a.name.localeCompare(b.name);
-    });
-
-    this.contacts.set(sorted);
+    this.contacts.set(updatedList);
   }
 }

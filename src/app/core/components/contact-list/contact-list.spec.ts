@@ -5,6 +5,7 @@ import { ContactService } from '../../services/contact.service';
 import { of } from 'rxjs';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { signal } from '@angular/core';
+import { provideNgxMask } from 'ngx-mask';
 
 describe('ContactList', () => {
   let component: ContactList;
@@ -48,9 +49,10 @@ describe('ContactList', () => {
   const contactStoreMock = {
     contacts: signal(mockContacts),
     contacts_set: jasmine.createSpy('contacts.set'),
+    loadContacts: jasmine.createSpy('loadContacts'), // 👈 adicionado
   };
 
-  // Para mockar o setter do signal, vamos substituir o método 'set' do signal:
+  // Substitui o método `set` da signal pelo nosso spy
   contactStoreMock.contacts.set = contactStoreMock.contacts_set;
 
   // Mock do ContactService
@@ -64,6 +66,7 @@ describe('ContactList', () => {
       providers: [
         { provide: ContactStore, useValue: contactStoreMock },
         { provide: ContactService, useValue: contactServiceMock },
+        provideNgxMask(),
       ],
     }).compileComponents();
 
@@ -95,12 +98,11 @@ describe('ContactList', () => {
     const updatedList =
       contactStoreMock.contacts_set.calls.mostRecent().args[0];
     expect(updatedList.length).toBe(mockContacts.length);
-    // Verifica se o item que estava na posição 0 foi para a 2
-    expect(updatedList[2].id).toBe(mockContacts[0].id);
+    expect(updatedList[2].id).toBe(mockContacts[0].id); // verifica troca
   });
 
   it('should toggle favorite and update store', () => {
-    const contact = mockContacts[0];
+    const contact = { ...mockContacts[0] }; // evita side effect no original
     contactServiceMock.updateContact.and.returnValue(of({}));
 
     component.onFavoriteToggled(contact);
@@ -115,20 +117,12 @@ describe('ContactList', () => {
     expect(contactStoreMock.contacts_set).toHaveBeenCalled();
 
     const newList = contactStoreMock.contacts_set.calls.mostRecent().args[0];
-    // Verifica que o contato teve o isFavorite invertido
-    const updatedContact = newList.find(
-      (c: {
-        id: number;
-        name: string;
-        isFavorite: boolean;
-        isActive: boolean;
-      }) => c.id === contact.id
-    );
+    const updatedContact = newList.find((c: any) => c.id === contact.id);
     expect(updatedContact?.isFavorite).toBe(true);
   });
 
   it('should toggle active state and update store', () => {
-    const contact = mockContacts[2];
+    const contact = { ...mockContacts[2] }; // evita side effect no original
     contactServiceMock.updateContact.and.returnValue(of({}));
 
     component.onDeactivate(contact);
@@ -143,15 +137,7 @@ describe('ContactList', () => {
     expect(contactStoreMock.contacts_set).toHaveBeenCalled();
 
     const newList = contactStoreMock.contacts_set.calls.mostRecent().args[0];
-    // Verifica que o contato teve o isActive invertido
-    const updatedContact = newList.find(
-      (c: {
-        id: number;
-        name: string;
-        isFavorite: boolean;
-        isActive: boolean;
-      }) => c.id === contact.id
-    );
+    const updatedContact = newList.find((c: any) => c.id === contact.id);
     expect(updatedContact?.isActive).toBe(true);
   });
 });

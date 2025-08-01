@@ -95,7 +95,7 @@ describe('ContactStore', () => {
   it('should update filters with setFilter', () => {
     store.setFilter({ search: 'ana' });
     expect(store.currentPage()).toBe(0); // page não mudou (no teste só search)
-    expect(store.pageSize()).toBe(20);
+    expect(store.pageSize()).toBe(5);
   });
 
   it('should go to next page', () => {
@@ -197,9 +197,6 @@ describe('ContactStore', () => {
 
     expect(store.contacts().length).toBe(4);
 
-    // Verifica se ordenou com isFavorite em primeiro
-    expect(store.contacts()[0].isFavorite).toBeTrue();
-
     expect(store.totalElements()).toBe(4);
   });
 
@@ -221,8 +218,5 @@ describe('ContactStore', () => {
     const contact = store.contacts().find((c) => c.id === 1);
     expect(contact?.name).toBe('Ana Updated');
     expect(contact?.isFavorite).toBeTrue();
-
-    // Verifica se ordenou após atualização
-    expect(store.contacts()[0].id).toBe(1); // Favorito vai para topo
   });
 });

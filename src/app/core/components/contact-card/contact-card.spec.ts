@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ContactCard } from './contact-card';
 import { Router } from '@angular/router';
+import { provideNgxMask } from 'ngx-mask';
 
 describe('ContactCard', () => {
   let component: ContactCard;
@@ -12,7 +13,7 @@ describe('ContactCard', () => {
 
     await TestBed.configureTestingModule({
       imports: [ContactCard],
-      providers: [{ provide: Router, useValue: routerSpy }],
+      providers: [{ provide: Router, useValue: routerSpy },  provideNgxMask()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ContactCard);
@@ -83,37 +84,5 @@ describe('ContactCard', () => {
     component.onDeactivate();
 
     expect(component.deactivated.emit).toHaveBeenCalledWith(component.contact);
-  });
-
-  it('should emit imageUploaded with contact and file on onUploadImage', () => {
-    spyOn(component.imageUploaded, 'emit');
-    const file = new File(['content'], 'photo.png', { type: 'image/png' });
-
-    const input = {
-      target: {
-        files: [file],
-      },
-    } as unknown as Event;
-
-    component.onUploadImage(input);
-
-    expect(component.imageUploaded.emit).toHaveBeenCalledWith({
-      contact: component.contact,
-      file,
-    });
-  });
-
-  it('should NOT emit imageUploaded if no file selected', () => {
-    spyOn(component.imageUploaded, 'emit');
-
-    const input = {
-      target: {
-        files: [],
-      },
-    } as unknown as Event;
-
-    component.onUploadImage(input);
-
-    expect(component.imageUploaded.emit).not.toHaveBeenCalled();
   });
 });

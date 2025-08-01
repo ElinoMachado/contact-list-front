@@ -36,6 +36,12 @@ export class ContactStore {
     const params = this.filters();
     this.contactService.findAll(params).subscribe((res) => {
       let contacts = res.content;
+       contacts = contacts.sort((a, b) => {
+        if (a.isFavorite !== b.isFavorite) {
+          return a.isFavorite ? -1 : 1;
+        }
+        return a.name.localeCompare(b.name);
+      });
       this.contacts.set(contacts);
       this.totalElements.set(res.totalElements);
       this.totalPages.set(res.totalPages);
